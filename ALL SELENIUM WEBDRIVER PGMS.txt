@@ -1,0 +1,279 @@
+DRAG AND DROP PGM
+
+public class dragAnddrop {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		
+		driver.get("https://demo.guru99.com/test/drag_drop.html");
+		WebElement From= driver.findElement(By.xpath("//*[@id=\"credit2\"]/a"));
+		WebElement To= driver.findElement(By.xpath("//*[@id=\"bank\"]/li"));
+		Actions act = new Actions(driver);
+		act.dragAndDrop(From, To).build().perform();
+		
+		WebElement from1=driver.findElement(By.xpath("//*[@id=\"fourth\"]/a"));
+		WebElement to1=driver.findElement(By.xpath("//*[@id=\"amt7\"]/li"));
+		
+		Actions act1 = new Actions(driver);
+		act1.dragAndDrop(from1, to1).build().perform();
+
+
+	}
+
+}
+
+
+
+***********************************************************************************************************
+BROKEN LINK PGM
+
+public class brokenlinks {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		String homepage="https://www.facebook.com/login/";
+				String url=null;
+				HttpsURLConnection huc=null;
+				int respcode=200;
+				driver.manage().window().maximize();
+				driver.get(homepage);
+				java.util.List<WebElement> links=driver.findElements(By.tagName("a"));
+				Iterator<WebElement> it=links.iterator();
+				while(it.hasNext())
+				{
+				url=it.next().getAttribute("href");
+				System.out.println(url);
+				if(url==null || url.isEmpty())
+				{
+				System.out.println("url is not configured or its empty");
+				continue;
+				}
+				if(!url.startsWith(homepage))
+				{
+				System.out.println("url belongs to another domain");
+				continue;
+				}
+				try{
+				huc=(HttpsURLConnection)(new URL(url).openConnection());
+				huc.setRequestMethod("HEAD");
+				huc.connect();
+				respcode=huc.getResponseCode();
+				if(respcode>=400)
+				{
+				System.out.println(url+ "is a broken link");
+				}
+				else
+				{
+				System.out.println(url+ "is a valid link");
+				}
+				}catch(MalformedURLException e){
+				e.printStackTrace();
+				}
+				catch(IOException e)
+				{
+				e.printStackTrace();
+				}
+
+	}
+
+}
+}
+
+**************************************************************************************************************
+COUNT THE LINK IN A WEBPAGE
+
+public class countlink {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		String homepage="https://www.facebook.com/login/";
+		driver.get(homepage);
+		System.out.println("total link count " +driver.findElements(By.tagName("a")).size());
+		//WebElement head=driver.FindElement(By.id(“//id header”));      
+		//System.out.println("total link in head " +driver.findElements(By.tagName("a")).size());
+		WebElement foot=driver.findElement(By.id("pageFooter"));
+		System.out.println("total link in footer" +driver.findElements(By.tagName("a")).size());
+	}
+
+}
+
+
+****************************************************************************************************************
+TITLE
+
+public class title {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://www.facebook.com/login/");
+		
+		System.out.println("Title is " +driver.getTitle());
+		String expected="Log in to Facebook";
+		String actual=driver.getTitle();
+		if(expected.contentEquals(actual))
+		{
+		System.out.println("test case passed");
+		}
+		else
+		{
+		System.out.println("test case failed");
+		}
+
+	}
+
+}
+
+******************************************************************************************************************
+SCREENSHOT
+
+public class screenshot {
+
+	public void findScreenShot()
+	{
+		try
+		{
+			System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+			WebDriver driver=new ChromeDriver();
+			driver.get("https://www.facebook.com/login/");
+			
+			
+			File screen=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			FileHandler.copy(screen, new File("C:\\Users\\SWT\\Desktop\\manjuswt\\abc.jpeg"));
+	
+		}
+		catch(Exception exception)
+		{                 
+			System.out.println(exception);
+		}
+	}
+		public static void main(String[] args)
+		 {
+		
+		screenshot obj=new screenshot();
+		obj.findScreenShot();
+		}
+}
+
+*****************************************************************************************************************************
+LOGIN
+
+
+public class LoginPgm {
+	
+	public void login()
+	{
+		try {
+			System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+			WebDriver driver=new ChromeDriver();
+			driver.get("https://www.facebook.com/login/");
+			
+			driver.findElement(By.id("email")).sendKeys("ytrfyhhjg");
+			driver.findElement(By.id("pass")).sendKeys("2435");
+			driver.findElement(By.id("loginbutton")).click();
+		}
+		catch(Exception exp)
+		{
+			System.out.println(exp);
+		}
+	}
+
+	public static void main(String[] args) {
+		LoginPgm obj=new LoginPgm();
+		obj.login();
+	}
+
+}
+
+******************************************************************************************************************************
+MULTIPLE WINDOW
+
+public class multiplewindow {
+	public void Multi() {
+		try {
+			System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+			WebDriver driver=new ChromeDriver();
+			driver.get("https://www.facebook.com/login/");
+			driver.findElement(By.linkText("Forgotten account?")).click();
+			Set<String> a=driver.getWindowHandles();
+			Iterator<String> it=a.iterator();
+			while(it.hasNext())
+			{
+			String childwindow=it.next();
+			driver.switchTo().window(childwindow);
+			}
+		}
+			catch(Exception exception)
+			{
+				System.out.println(exception);
+			}
+
+			
+		
+	}
+
+	public static void main(String[] args) {
+		multiplewindow obj=new multiplewindow();
+		obj.Multi();
+		
+	}
+
+}
+
+*******************************************************************************************************************************************
+POPUP WINDOW
+
+public class popupmsg {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		String alertMessage = "";
+		driver.get("http://jsbin.com/usidix/1");
+		driver.findElement(By.cssSelector("input[value=\"Go!\"]")).click();
+		alertMessage = driver.switchTo().alert().getText();
+		driver.switchTo().alert().accept();
+		System.out.println(alertMessage);
+		driver.close();
+
+	}
+
+}
+
+*******************************************************************************************************************************************
+
+CHECK BOX AND RADIO BUTTON
+
+public class checkboxradiobtn {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\SWT\\Desktop\\sele\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.get("http://demo.guru99.com/test/radio.html");
+		WebElement radio1 = driver.findElement(By.id("vfb-7-1"));
+		WebElement radio2 = driver.findElement(By.id("vfb-7-2"));
+		//Radio Button 1 is selected
+		radio1.click();
+		System.out.println("Radio Button Option 1 Selected");
+		//Radio Button 1 is deselected and Radio Button 2 is selected
+		radio2.click();
+		System.out.println("Radio Button Option 2 Selected");
+		// Selecting CheckBox
+		WebElement option1 = driver.findElement(By.id("vfb-6-0"));
+		// This will Toggle the Checkbox
+		option1.click();
+		// Check whether the Checkbox is toggled on
+		if (option1.isSelected()) {
+		System.out.println("Checkbox is Toggled On");
+		} else {
+		System.out.println("Checkbox is Toggled Off");
+		}
+
+	}
+
+}
+
+	
